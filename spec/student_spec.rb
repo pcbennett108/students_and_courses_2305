@@ -17,15 +17,15 @@ RSpec.describe Student do
   end
   
   it "keeps scores" do
-    student.log_score(89)
-    student.log_score(78)
+    @student.log_score(89)
+    @student.log_score(78)
     expect(@student.scores).to eq([89, 78])
   end
 
   it "can give student grade average of scores" do
-    student.log_score(89)
-    student.log_score(78)
-    expect(@student.scores).to eq(83.5)
+    @student.log_score(89)
+    @student.log_score(78)
+    expect(@student.grade).to eq(83.5)
   end
 
 end
