@@ -31,7 +31,9 @@ RSpec.describe Gradebook do
     @gradebook.add_course(@course1)
     @gradebook.add_course(@course2)
     @gradebook.add_course(@course3)
+
     expect(@gradebook.courses.length).to eq(3)
+    expect(@gradebook.courses).to eq([@course1, @course2, @course3])
   end
 
   it "can list all students" do
@@ -41,6 +43,13 @@ RSpec.describe Gradebook do
     @gradebook.add_course(@course2)
 
     expect(@gradebook.list_all_students).to eq({@course2 => @course2.students})
+    
+    @course3.enroll(@student2)
+    @course3.enroll(@student3)
+    @course3.enroll(@student4)
+    @gradebook.add_course(@course3)
+    
+    expect(@gradebook.list_all_students).to eq({@course2 => @course2.students, @course3 => @course3.students})
   end
 
   it "can show students below threshold" do
@@ -53,16 +62,31 @@ RSpec.describe Gradebook do
     @student2.log_score(88)
     @student2.log_score(92)
     @student2.log_score(95)
-
-    @course2.enroll(@student1)
-    @course2.enroll(@student2)
+    
+    @course2.enroll(@student1) # 76.5
+    @course2.enroll(@student2) # 93.5
     @gradebook.add_course(@course2)
-    students_below = students_below(75)
+    
+    expect(@gradebook.students_below(78).length).to eq(1)
+    expect(@gradebook.students_below(78)).to eq([@student1])
+    
+    @student3.log_score(97)
+    @student3.log_score(92)
+    @student3.log_score(89)
+    @student3.log_score(98)
+    @student3.log_score(99)
+    
+    @student4.log_score(89)
+    @student4.log_score(86)
+    @student4.log_score(92)
+    @student4.log_score(83)
+    @student4.log_score(77)
+    
+    @course3.enroll(@student3) # 95.0
+    @course3.enroll(@student4) # 85.4
+    @gradebook.add_course(@course3)
 
-    expect(@gradebook.students_below.length).to eq(1)
-
+    expect(@gradebook.students_below(90)).to eq([@student1, @student4])
   end
-
-
-
+  
 end

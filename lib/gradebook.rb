@@ -1,3 +1,7 @@
+require './lib/course'
+require './lib/student'
+require 'pry'
+
 class Gradebook
   attr_reader :instructor, :courses
   def initialize(name)
@@ -18,13 +22,13 @@ class Gradebook
   end
 
   def students_below(threshold)
-    students_list = []
-    self.list_all_students.each do |student|
-      if student.grade < threshold
-        students_list << student
+    students_below_threshold = []
+    list_all_students.keys.each do |course|
+      list_all_students[course].each do |student|
+        students_below_threshold << student unless student.grade > threshold
       end
     end
-    students_list
+    students_below_threshold
   end
 
 end
